@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap-5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/style.css">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4">
+          <img
+            src="./assets/ut_logo.png"
+            alt="University of Tehran Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-bottom: 20px"
+          />
+        </div>
+        <div class="col-4 head_name">
+            <p>پاسخ سوال اول</p>
+        </div>
+        <div class="col-4" style="text-align: left;">
+          <img
+            src="./assets/fanni_logo.png"
+            alt="College of Engineering Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+          />
+        </div>
+      </div>
+      <h2>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</h2>
+      <p>
+        این سند به بررسی یک مسئله فتوگرامتری از درس نقشه‌برداری ژئودتیک
+        می‌پردازد که هدف آن محاسبه انحراف معیار (دقت) مختصات سه‌بعدی یک نقطه
+        تقاطع (P) است که در دو تصویر استریو مشاهده شده است. مسئله شامل استفاده
+        از معادلات هم‌خطی (collinearity equations) و انتشار خطا (error
+        propagation) برای تعیین دقت مختصات \( (X, Y, Z) \) نقطه P است.
+      </p>
+
+      <h3>۱. صورت مسئله</h3>
+      <p>در این مسئله، داده‌های زیر ارائه شده‌اند:</p>
+
+      <ul>
+        <li><strong>مختصات تصویر:</strong></li>
+        <ul>
+          <li>
+            تصویر چپ: \( x_L = -7.5 \,\text{mm},\quad y_L = -10 \,\text{mm} \)
+          </li>
+          <li>
+            تصویر راست: \( x_R = 7.5 \,\text{mm},\quad y_R = -10 \,\text{mm} \)
+          </li>
+        </ul>
+        <li>
+          <strong>مختصات نقطه تقاطع در فضا:</strong> \( (X_P, Y_P, Z_P) = (0.05,
+          0.0, 3.1) \,\text{m} \)
+        </li>
+        <li><strong>پارامترهای جهت‌گیری خارجی:</strong></li>
+        <ul>
+          <li>
+            دوربین چپ: \( (X_L, Y_L, Z_L) = (-7.5, -10, 1.7)\,\text{m} \)،
+            زوایا: \( (\omega, \phi, \kappa) = (90^\circ, -20^\circ, 0^\circ) \)
+          </li>
+          <li>
+            دوربین راست: \( (X_R, Y_R, Z_R) = (7.5, -10, 1.7)\,\text{m} \)،
+            زوایا: \( (\omega, \phi, \kappa) = (90^\circ, 20^\circ, 0^\circ) \)
+          </li>
+        </ul>
+        <li><strong>پارامترهای دوربین:</strong></li>
+        <ul>
+          <li>فاصله کانونی: \( f = 18 \,\text{mm} \)</li>
+          <li>اندازه پیکسل: \( 0.005 \,\text{mm} \)</li>
+          <li>
+            انحراف معیار مشاهدات: \( \sigma_{\text{pixels}} = 3 \,\text{pixels}
+            \Rightarrow \sigma_x = \sigma_y = 3 \times 0.005 = 0.015 \,\text{mm}
+            \)
+          </li>
+        </ul>
+      </ul>
+
+      <h3>۲. پیش‌زمینه نظری</h3>
+      <p>در فتوگرامتری، معادلات هم‌خطی به‌صورت زیر هستند:</p>
+      <div class="math">
+        \[ x = -f \frac{r_{11}(X - X_c) + r_{12}(Y - Y_c) + r_{13}(Z -
+        Z_c)}{r_{31}(X - X_c) + r_{32}(Y - Y_c) + r_{33}(Z - Z_c)} \] \[ y = -f
+        \frac{r_{21}(X - X_c) + r_{22}(Y - Y_c) + r_{23}(Z - Z_c)}{r_{31}(X -
+        X_c) + r_{32}(Y - Y_c) + r_{33}(Z - Z_c)} \]
+      </div>
+
+      <p>برای انتشار خطا:</p>
+      <ul>
+        <li>
+          تشکیل ماتریس طراحی \( A \): مشتقات جزئی \( (x_L, y_L, x_R, y_R) \)
+          نسبت به \( (X, Y, Z) \)
+        </li>
+        <li>ماتریس کوواریانس مشاهدات: \( \Sigma_{ll} = \sigma_0^2 I \)</li>
+        <li>ماتریس نرمال: \( N = A^T \Sigma_{ll}^{-1} A \)</li>
+        <li>ماتریس کوواریانس پاسخ: \( \Sigma_{xx} = N^{-1} \)</li>
+        <li>انحراف معیارها: \( \sigma_X = \sqrt{\Sigma_{xx}[0,0]} \) و ...</li>
+      </ul>
+
+      <h3>۳. محاسبات ریاضی</h3>
+      <h4>۳.۱. ماتریس چرخش</h4>
+      <div class="math">
+        \[ R = R_\kappa R_\phi R_\omega \] \[ R_\omega = \begin{bmatrix} 1 & 0 &
+        0 \\ 0 & \cos \omega & -\sin \omega \\ 0 & \sin \omega & \cos \omega
+        \end{bmatrix},\quad R_\phi = \begin{bmatrix} \cos \phi & 0 & \sin \phi
+        \\ 0 & 1 & 0 \\ -\sin \phi & 0 & \cos \phi \end{bmatrix},\quad R_\kappa
+        = \begin{bmatrix} \cos \kappa & -\sin \kappa & 0 \\ \sin \kappa & \cos
+        \kappa & 0 \\ 0 & 0 & 1 \end{bmatrix} \]
+      </div>
+
+      <h4>۳.۲. مشتقات جزئی</h4>
+      <p>با تعریف:</p>
+      <div class="math">
+        \[ \Delta X = X - X_c,\quad \Delta Y = Y - Y_c,\quad \Delta Z = Z - Z_c
+        \] \[ q = r_{31} \Delta X + r_{32} \Delta Y + r_{33} \Delta Z \]
+      </div>
+
+      <p>برای مشتق \( x \) نسبت به \( X \):</p>
+      <div class="math">
+        \[ \frac{\partial x}{\partial X} = -f \frac{r_{11} q - (r_{11} \Delta X
+        + r_{12} \Delta Y + r_{13} \Delta Z) r_{31}}{q^2} \]
+      </div>
+
+      <h4>۳.۳. انتشار خطا</h4>
+      <div class="math">
+        \[ \Sigma_{ll} = \sigma_x^2 I,\quad N = A^T \Sigma_{ll}^{-1} A,\quad
+        \Sigma_{xx} = N^{-1} \] \[ \sigma_X = \sqrt{\Sigma_{xx}[0,0]},\quad
+        \sigma_Y = \sqrt{\Sigma_{xx}[1,1]},\quad \sigma_Z =
+        \sqrt{\Sigma_{xx}[2,2]} \]
+      </div>
+    </div>
+  </body>
+</html>
