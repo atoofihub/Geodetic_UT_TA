@@ -58,3 +58,28 @@ align-content: center;
 font-size: 30px;
 font-weight: 800;
 }
+h2 {
+  color: #004080;
+}
+pre {
+  background: #eee;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+th, td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+code {
+  background: #eee;
+  padding: 2px 4px;
+  border-radius: 4px;
+}

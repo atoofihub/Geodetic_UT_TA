@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link
+      rel="stylesheet"
+      href="./assets/bootstrap-5.2.3/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4">
+          <img
+            src="./assets/ut_logo.png"
+            alt="University of Tehran Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-bottom: 20px"
+          />
+        </div>
+        <div class="col-4 head_name">
+          <p>پاسخ سوال چهارم</p>
+        </div>
+        <div class="col-4" style="text-align: left">
+          <img
+            src="./assets/fanni_logo.png"
+            alt="College of Engineering Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+          />
+        </div>
+      </div>
+
+      <h3>مرحله ۱: درک مسئله</h3>
+    <p>
+      تصویر مسئله‌ای از فتوگرامتری را نشان می‌دهد که هدف آن تعیین مختصات سه‌بعدی نقطه <strong>P</strong> با استفاده از اندازه‌گیری فاصله از پنج ایستگاه مشخص (A، B، C، D، E) است.
+    </p>
+    <p><strong>مختصات ایستگاه‌ها (به متر):</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>ایستگاه</th>
+          <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>X</td>
+          <td>2742.87</td><td>2751.59</td><td>2738.08</td><td>2715.23</td><td>2724.96</td>
+        </tr>
+        <tr>
+          <td>Y</td>
+          <td>91874.15</td><td>91872.49</td><td>91886.95</td><td>91852.36</td><td>91882.74</td>
+        </tr>
+        <tr>
+          <td>Z</td>
+          <td>510.56</td><td>513.76</td><td>518.11</td><td>515.39</td><td>516.28</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>فاصله‌های مشاهده‌شده تا نقطه P (به متر):</strong></p>
+    <p>
+      D = [3.71, 6.17, 15.90, 37.82, 22.90]
+    </p>
+
+    <p>
+      <strong>هدف:</strong> محاسبه مختصات (X<sub>P</sub>, Y<sub>P</sub>, Z<sub>P</sub>) نقطه P با استفاده از روش کمترین مربعات غیرخطی.
+    </p>
+
+    <p>
+      <strong>زمینه:</strong> این یک مسئله بازبینی است که در آن فاصله از چند ایستگاه به یک نقطه ناشناخته اندازه‌گیری شده و باید مختصات آن نقطه از طریق کمینه‌سازی اختلاف بین فاصله‌های مشاهده‌شده و فاصله‌های محاسبه‌شده تعیین شود.
+    </p>
+
+    <h3>مرحله ۲: مبانی نظری</h3>
+    <p>فاصله بین ایستگاه i با مختصات (X<sub>i</sub>, Y<sub>i</sub>, Z<sub>i</sub>) و نقطه P برابر است با:</p>
+    <pre>D<sub>ci</sub> = √[(X<sub>P</sub> - X<sub>i</sub>)² + (Y<sub>P</sub> - Y<sub>i</sub>)² + (Z<sub>P</sub> - Z<sub>i</sub>)²]</pre>
+
+    <p>مانده‌ها (Residuals) برای هر ایستگاه:</p>
+    <pre>v<sub>i</sub> = D<sub>i</sub> - D<sub>ci</sub></pre>
+
+    <p>هدف، کمینه کردن مجموع مربعات مانده‌ها است:</p>
+    <pre>Σ(v<sub>i</sub>)² = Σ(D<sub>i</sub> - D<sub>ci</sub>)²</pre>
+
+    <p>از روش کمترین مربعات غیرخطی با گام‌های زیر استفاده می‌شود:</p>
+    <ol>
+      <li>تخمین اولیه برای مختصات نقطه P</li>
+      <li>خطی‌سازی تابع فاصله با سری تیلور</li>
+      <li>تشکیل ماتریس طراحی (مشتقات جزئی نسبت به X, Y, Z)</li>
+      <li>تشکیل بردار مانده‌ها: l = D - D<sub>c</sub></li>
+      <li>حل معادله: Δ = (AᵀA)<sup>-1</sup> Aᵀl</li>
+      <li>به‌روزرسانی مختصات: X<sub>P</sub> += ΔX و ...</li>
+      <li>محاسبه ماتریس کوواریانس پس از همگرایی: Σ<sub>x̂</sub> = σ₀² (AᵀA)<sup>-1</sup></li>
+    </ol>
+
+
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link
+      rel="stylesheet"
+      href="./assets/bootstrap-5.2.3/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4">
+          <img
+            src="./assets/ut_logo.png"
+            alt="University of Tehran Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-bottom: 20px"
+          />
+        </div>
+        <div class="col-4 head_name">
+          <p>پاسخ سوال دوم</p>
+        </div>
+        <div class="col-4" style="text-align: left">
+          <img
+            src="./assets/fanni_logo.png"
+            alt="College of Engineering Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+          />
+        </div>
+      </div>
+      <h2>مرحله ۱: درک مسئله</h2>
+      <p>
+        تصویر نشان‌دهنده یک مسئله نقشه‌برداری ژئودتیکی با چهار ایستگاه A، B، C،
+        D است:
+      </p>
+
+      <ul>
+        <li><b>مختصات ایستگاه‌ها (متر):</b></li>
+      </ul>
+      <p>
+        \( X_A = 6276,\quad Y_A = 91543 \)<br />
+        \( X_B = 7398,\quad Y_B = 88102 \)<br />
+        \( X_C = 500,\quad Y_C = 90500 \) (ثابت)<br />
+        \( X_D = 2320,\quad Y_D = 87381 \) (ثابت)
+      </p>
+
+      <ul>
+        <li><b>ماتریس‌های کوواریانس:</b></li>
+      </ul>
+      <p>برای ایستگاه A:</p>
+      <p>
+        \[ \Sigma_A = \begin{bmatrix} 0.001555 & 0.001503 \\ 0.001503 & 0.003408
+        \end{bmatrix} \]
+      </p>
+      <p>برای ایستگاه B:</p>
+      <p>
+        \[ \Sigma_B = \begin{bmatrix} 0.000756 & -0.000596 \\ -0.000596 &
+        0.005132 \end{bmatrix} \]
+      </p>
+
+      <p>
+        هدف، محاسبه بیضی‌های خطا برای A و B در سطح اطمینان ۹۵٪ است: محورهای اصلی
+        \( a, b \)، زاویه چرخش \( \theta \)، و مساحت.
+      </p>
+
+      <hr />
+
+      <h2>مرحله ۲: پیش‌زمینه نظری</h2>
+      <p>
+        بیضی خطا، عدم قطعیت مختصات دوبعدی نقطه‌ای مانند \( (X, Y) \) را با
+        استفاده از ماتریس کوواریانس نشان می‌دهد:
+      </p>
+
+      <p>
+        \[ \Sigma = \begin{bmatrix} \sigma_X^2 & \sigma_{XY} \\ \sigma_{XY} &
+        \sigma_Y^2 \end{bmatrix} \]
+      </p>
+
+      <p>
+        - محورهای بیضی: \[ a = k \sqrt{\lambda_{\text{max}}},\quad b = k
+        \sqrt{\lambda_{\text{min}}} \]
+      </p>
+
+      <p>
+        - زاویه چرخش بیضی از بردار ویژه متناظر با \( \lambda_{\text{max}} \)
+        استخراج می‌شود.<br />
+        - مساحت بیضی: \[ A = \pi a b \]
+      </p>
+
+      <p>
+        که \( k \) برای سطح اطمینان ۹۵٪ برابر است با: \[ k = \sqrt{5.991}
+        \approx 2.447 \]
+      </p>
+    </div>
+  </body>
+</html>
