@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap-5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/style.css">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+            <div class="col-4">
+            <img
+                src="./assets/ut_logo.png"
+                alt="University of Tehran Logo"
+                class="img-fluid"
+                style="max-height: 100px; margin-bottom: 20px"
+            />
+            </div>
+            <div class="col-4 head_name">
+                <p>پاسخ سوال اول</p>
+            </div>
+            <div class="col-4" style="text-align: left;">
+            <img
+                src="./assets/fanni_logo.png"
+                alt="College of Engineering Logo"
+                class="img-fluid"
+                style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+            />
+            </div>
+      </div>
+      <div class="row">
+        <h2>حل مسئله با روش کمترین مربعات غیرخطی</h2>
+    
+        <p>
+            هدف، سرشکنی مشاهدات طول و زاویه در یک شبکه ژئودتیک با استفاده از روش کمترین مربعات غیرخطی است تا مختصات دقیق نقاط ناشناخته P6، P15 و P16 را محاسبه کنیم. نقاط P1، P2، P3 و P5 مختصات معلوم دارند و مشاهدات طول بین این نقاط و نقاط ناشناخته، همراه با زوایا در نقاط ناشناخته، به عنوان داده‌های ورودی استفاده می‌شوند. به دلیل وابستگی خطی احتمالی بین زوایا، یکی از زوایا (مثلاً \( \angle P2 - P6 - P1 \)) حذف شده است.
+            </p>
+            
+            <h2>مجهولات</h2>
+            <p>مجهولات مسئله مختصات نقاط ناشناخته هستند. هر نقطه دارای دو مختصات \( x \) و \( y \) است، بنابراین با سه نقطه P6، P15 و P16، تعداد کل مجهولات ۶ است:</p>
+            <div class="math-block">$$
+            X = \begin{bmatrix}
+            x_{P6} \\
+            y_{P6} \\
+            x_{P15} \\
+            y_{P15} \\
+            x_{P16} \\
+            y_{P16}
+            \end{bmatrix}
+            $$</div>
+            
+            <p><strong>مقادیر اولیه:</strong> بر اساس مختصات تقریبی داده‌شده:</p>
+            <div class="math-block">$$
+            X_0 = \begin{bmatrix}
+            1269.918 \\
+            1259.823 \\
+            2310.045 \\
+            1119.938 \\
+            1604.825 \\
+            1000.013
+            \end{bmatrix}
+            $$</div>
+            
+            <h2>مشاهدات</h2>
+            <p>مشاهدات شامل ۱۲ طول و ۴ زاویه هستند که در بردار زیر جمع‌بندی می‌شوند:</p>
+            <div class="math-block">$$
+            L = \begin{bmatrix}
+            L_1 \\
+            L_2 \\
+            \vdots \\
+            L_{12} \\
+            \theta_1 \\
+            \theta_2 \\
+            \theta_3 \\
+            \theta_4
+            \end{bmatrix}
+            $$</div>
+            
+            <p><strong>طول‌ها (۱۲ مشاهده):</strong></p>
+            <div class="math-block">$$
+            L = \begin{bmatrix}
+            560.01 \\
+            5903.79 \\
+            31108.26 \\
+            604.99 \\
+            6824.38 \\
+            3787.55 \\
+            653.16 \\
+            1512.31 \\
+            3550.36 \\
+            1965.10 \\
+            6715.14 \\
+            547.40
+            \end{bmatrix}
+            $$</div>
+            
+            <p><em>به ترتیب برای زوج‌های P5−P1، P5−P2، P5−P3، P5−P16، P16−P1، P16−P2، P16−P3، P2−P1، P2−P3، P1−P3، P16−P15، P3−P15</em></p>
+            
+            <p><strong>زوایا (۴ مشاهده):</strong></p>
+            <div class="math-block">$$
+            \theta = \begin{bmatrix}
+            46.9655 \\
+            107.0770 \\
+            205.3422 \\
+            236.5532
+            \end{bmatrix}
+            $$</div>
+            <p><em>به ترتیب برای \( \angle P2 - P6 - P3 \)، \( \angle P2 - P6 - P16 \)، \( \angle P2 - P6 - P5 \)، \( \angle P3 - P16 - P5 \) (تبدیل‌شده به درجه اعشاری)</em></p>
+            
+            <h2>ماتریس وزن</h2>
+            <p>
+            ماتریس وزن \( W \) یک ماتریس دیاگونال است که بر اساس واریانس مشاهدات تعریف می‌شود.
+            </p>
+            <p>واریانس‌ها:</p>
+            <ul>
+              <li>واریانس طول‌ها: \( \sigma_D^2 \) بین 0.0092 تا 0.0132</li>
+              <li>واریانس زوایا: \( \sigma_\theta^2 = \left( \frac{3}{3600} \right)^2 \approx (0.000833)^2 \)</li>
+            </ul>
+            <p>ماتریس وزن:</p>
+            <div class="math-block">$$
+            W = \mathrm{diag}\left(
+            \frac{1}{\sigma_1^2}, \frac{1}{\sigma_2^2}, \ldots, \frac{1}{\sigma_{16}^2}
+            \right)
+            $$</div>
+            
+            <h2>مدل و تابع هدف</h2>
+            <p><strong>مدل طول:</strong></p>
+            <div class="math-block">$$
+            f_{\text{distance}}(X) = \sqrt{(x_A - x_B)^2 + (y_A - y_B)^2}
+            $$</div>
+            
+            <p><strong>مدل زاویه:</strong></p>
+            <div class="math-block">$$
+            \theta_{\text{calc}} = \text{atan2}(y_A - y_B, x_A - x_B) - \text{atan2}(y_C - y_B, x_C - x_B)
+            $$</div>
+            
+            <p>با تبدیل به درجه و نگاشت به بازه \( [0, 360^\circ) \):</p>
+            <pre>
+            if θ_calc &lt; 0:
+                θ_calc += 360
+            </pre>
+            
+            <p><strong>بردار مدل:</strong></p>
+            <div class="math-block">$$
+            F(X) = \begin{bmatrix}
+            f_1(X) \\
+            f_2(X) \\
+            \vdots \\
+            f_{12}(X) \\
+            \theta_1(X) \\
+            \theta_2(X) \\
+            \theta_3(X) \\
+            \theta_4(X)
+            \end{bmatrix}
+            $$</div>
+            
+            <p><strong>تابع هدف:</strong></p>
+            <div class="math-block">$$
+            \min V^T W V
+            \quad \text{که } V = F(X) - L
+            $$</div>
+            
+            <h2>ماتریس طرح (ژاکوبین)</h2>
+            <div class="math-block">$$
+            J = \frac{\partial F(X)}{\partial X}
+            $$</div>
+            
+            <p>ابعاد: 16 × 6</p>
+            
+            <p><strong>مشتقات برای طول:</strong></p>
+            <div class="math-block">$$
+            \frac{\partial f}{\partial x_A} = \frac{x_A - x_B}{f}, \quad
+            \frac{\partial f}{\partial y_A} = \frac{y_A - y_B}{f}
+            $$</div>
+            <div class="math-block">$$
+            \frac{\partial f}{\partial x_B} = -\frac{x_A - x_B}{f}, \quad
+            \frac{\partial f}{\partial y_B} = -\frac{y_A - y_B}{f}
+            $$</div>
+            
+            <p><strong>مشتقات برای زاویه:</strong></p>
+            <div class="math-block">$$
+            \frac{\partial}{\partial x} \text{atan2}(y, x) = \frac{-y}{x^2 + y^2}, \quad
+            \frac{\partial}{\partial y} \text{atan2}(y, x) = \frac{x}{x^2 + y^2}
+            $$</div>
+            <div class="math-block">$$
+            \frac{\partial \theta}{\partial x} = \frac{\partial \theta_{\text{rad}}}{\partial x} \cdot \frac{180}{\pi}
+            $$</div>
+            
+            <h2>معادلات نرمال وزن‌دار</h2>
+            <div class="math-block">$$
+            (J^T W J) \Delta X = -J^T W r
+            $$</div>
+            
+            <p>که در آن:</p>
+            <ul>
+              <li>\( \Delta X \): تصحیح بردار مجهولات</li>
+              <li>\( r = F(X) - L \): بردار پسماند</li>
+              <li>\( J^T W J \): تقریب ماتریس هسی</li>
+              <li>\( J^T W r \): گرادیان وزن‌دار</li>
+            </ul>
+            
+            <p><strong>راه‌حل عددی با شبه‌معکوس:</strong></p>
+            <div class="math-block">$$
+            \Delta X = - (J^T W J)^+ J^T W r
+            $$</div>
+            
+            <p><strong>به‌روزرسانی:</strong></p>
+            <div class="math-block">$$
+            X_{\text{new}} = X_{\text{old}} + \Delta X
+            $$</div>
+            
+            <h2>دقت‌ها</h2>
+            <p>دقت طول‌ها: واریانس‌ها بین 0.0092 تا 0.0132 متر مربع، که نشان‌دهنده خطای استاندارد بین...</p>
+            
+
+  </body>
+</html>

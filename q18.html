@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap-5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/style.css">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+            <div class="col-4">
+            <img
+                src="./assets/ut_logo.png"
+                alt="University of Tehran Logo"
+                class="img-fluid"
+                style="max-height: 100px; margin-bottom: 20px"
+            />
+            </div>
+            <div class="col-4 head_name">
+                <p>پاسخ سوال اول</p>
+            </div>
+            <div class="col-4" style="text-align: left;">
+            <img
+                src="./assets/fanni_logo.png"
+                alt="College of Engineering Logo"
+                class="img-fluid"
+                style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+            />
+            </div>
+      </div>
+      <div class="row">
+        <h2>حل مسئله با روش کمترین مربعات غیرخطی</h2>
+        <p><strong>داده‌ها:</strong></p>
+        <ul>
+        <li>مختصات نقاط کنترل (Stations):</li>
+        <ul>
+            <li>11: \( (270.71,\ 370.71) \)</li>
+            <li>22: \( (200.00,\ 200.00) \)</li>
+            <li>33: \( (341.42,\ 200.00) \)</li>
+        </ul>
+        <li>فواصل اندازه‌گیری‌شده:</li>
+        <ul>
+            <li>\( 1{-}2: 184.785 \) متر</li>
+            <li>\( 1{-}3: 184.805 \) متر</li>
+            <li>\( 1{-}P: 100.01 \) متر</li>
+            <li>\( 2{-}3: 141.44 \) متر</li>
+            <li>\( 2{-}P: 100.02 \) متر</li>
+            <li>\( 3{-}P: 100.03 \) متر</li>
+        </ul>
+        </ul>
+
+        <h2>هدف:</h2>
+        <p>
+        هدف ما پیدا کردن مختصات نقطه \( P \) است. چون مختصات نقاط 11، 22 و 33 مشخص هستند، این مسئله با روش تریلاتراسیون قابل حل است. ما از روش کمترین مربعات غیرخطی برای یافتن \( P = (x_P, y_P) \) استفاده می‌کنیم.
+        </p>
+
+        <h2>گام 1: تعریف مجهولات</h2>
+        <p>
+        مجهولات: \( X = \begin{bmatrix} x_P \\ y_P \end{bmatrix} \) (تعداد: 2)<br>
+        مقدار اولیه تقریبی:
+        </p>
+        \[
+        x_{\text{initial}} = \frac{270.71 + 200.00 + 341.42}{3} \approx 270.71, \quad
+        y_{\text{initial}} = \frac{370.71 + 200.00 + 200.00}{3} \approx 256.90
+        \]
+        \[
+        X_0 = \begin{bmatrix} 270.71 \\ 256.90 \end{bmatrix}
+        \]
+
+        <h2>گام 2: تعریف مشاهدات</h2>
+        <p>
+        بردار مشاهدات:
+        \[
+        L = \begin{bmatrix} d_{1{-}P} \\ d_{2{-}P} \\ d_{3{-}P} \end{bmatrix} = 
+        \begin{bmatrix} 100.01 \\ 100.02 \\ 100.03 \end{bmatrix}
+        \]
+        </p>
+
+        <h2>گام 3: تعریف مدل</h2>
+        <p>
+        مدل فاصله اقلیدسی بین نقطه \( P \) و نقاط کنترل است:
+        </p>
+        \[
+        f_i(X) = (x_P - x_i)^2 + (y_P - y_i)^2
+        \]
+        \[
+        F(X) = \begin{bmatrix}
+        f_1(X) \\ f_2(X) \\ f_3(X)
+        \end{bmatrix} =
+        \begin{bmatrix}
+        (x_P - x_1)^2 + (y_P - y_1)^2 \\
+        (x_P - x_2)^2 + (y_P - y_2)^2 \\
+        (x_P - x_3)^2 + (y_P - y_3)^2
+        \end{bmatrix}
+        \]
+        <p>که:</p>
+        <ul>
+        <li>\( (x_1, y_1) = (270.71,\ 370.71) \)</li>
+        <li>\( (x_2, y_2) = (200.00,\ 200.00) \)</li>
+        <li>\( (x_3, y_3) = (341.42,\ 200.00) \)</li>
+        </ul>
+
+        <h2>گام 4: بردار خطاها (Residuals)</h2>
+        \[
+        r_i = f_i(X) - L_i, \quad r = F(X) - L
+        \]
+        \[
+        r = \begin{bmatrix}
+        (x_P - x_1)^2 + (y_P - y_1)^2 - 100.01 \\
+        (x_P - x_2)^2 + (y_P - y_2)^2 - 100.02 \\
+        (x_P - x_3)^2 + (y_P - y_3)^2 - 100.03
+        \end{bmatrix}
+        \]
+
+        <h2>گام 5: ماتریس طرح (ژاکوبین)</h2>
+        \[
+        J = \frac{\partial F(X)}{\partial X} =
+        \begin{bmatrix}
+        \frac{\partial f_1}{\partial x_P} & \frac{\partial f_1}{\partial y_P} \\
+        \frac{\partial f_2}{\partial x_P} & \frac{\partial f_2}{\partial y_P} \\
+        \frac{\partial f_3}{\partial x_P} & \frac{\partial f_3}{\partial y_P}
+        \end{bmatrix}
+        \]
+
+        <p>برای هر تابع:</p>
+        \[
+        \frac{\partial f_i}{\partial x_P} = \frac{x_P - x_i}{\sqrt{(x_P - x_i)^2 + (y_P - y_i)^2}}, \quad
+        \frac{\partial f_i}{\partial y_P} = \frac{y_P - y_i}{\sqrt{(x_P - x_i)^2 + (y_P - y_i)^2}}
+        \]
+
+        <p>برای مقدار اولیه \( X_0 = (270.71,\ 256.90) \):</p>
+        \[
+        f_1 \approx (270.71 - 270.71)^2 + (256.90 - 370.71)^2 \approx 113.81
+        \]
+        \[
+        \frac{\partial f_1}{\partial x_P} = 0, \quad
+        \frac{\partial f_1}{\partial y_P} \approx \frac{-113.81}{113.81} = -1.000
+        \]
+
+        <h2>گام 6: الگوریتم گوس-نیوتن</h2>
+        <p>در هر تکرار:</p>
+        <ul>
+        <li>محاسبه بردار باقیمانده‌ها \( r \)</li>
+        <li>محاسبه ژاکوبین \( J \)</li>
+        <li>حل معادله نرمال: \( (J^T J) \Delta X = -J^T r \)</li>
+        </ul>
+  </body>
+</html>

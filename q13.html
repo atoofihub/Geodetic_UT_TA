@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تحلیل دقت مختصات سه‌بعدی در فتوگرامتری</title>
+    <script src="./assets/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./assets/bootstrap-5.2.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/style.css">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-4">
+          <img
+            src="./assets/ut_logo.png"
+            alt="University of Tehran Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-bottom: 20px"
+          />
+        </div>
+        <div class="col-4 head_name">
+            <p>پاسخ سوال اول</p>
+        </div>
+        <div class="col-4" style="text-align: left;">
+          <img
+            src="./assets/fanni_logo.png"
+            alt="College of Engineering Logo"
+            class="img-fluid"
+            style="max-height: 100px; margin-top: 0px; transform: scale(1.2)"
+          />
+        </div>
+      </div>
+      <h2>حل مسئله نقشه‌برداری ژئودتیکی با استفاده از کمترین مربعات غیرخطی</h2>
+
+    <p>بیایید مسئله نگاشت ژئودتیک را با الزامات مشخص شده حل کنیم. از یک <strong>حلقه while</strong> برای حل تکراری مسئله حداقل مربعات غیرخطی استفاده خواهیم کرد و توضیحات مفصلی درباره درجات آزادی، رتبه ماتریس طراحی، فرمول‌بندی حداقل مربعات و ماتریس‌های درگیر (ماتریس طراحی، مشاهدات و مجهولات) ارائه می‌دهیم. سپس راه‌حل را در یک نوت‌بوک ژوپیتر با نظرات انگلیسی پیاده‌سازی می‌کنیم.</p>
+
+    <h2>گام 1: مرور مسئله و تنظیمات</h2>
+    <p>ما باید مرکز زلزله \((X, Y, Z, t_0)\) را با استفاده از داده‌های زیر پیدا کنیم:</p>
+    <ul>
+        <li>مختصات ایستگاه‌ها \((X_i, Y_i, Z_i)\) و زمان‌های رسیدن موج P و S مشاهده‌شده برای 15 ایستگاه.</li>
+        <li>سرعت‌ها: \( v_p = 6500 \, \text{m/s} \)، \( v_s = 3651.7 \, \text{m/s} \).</li>
+        <li>حدس اولیه: \((X, Y, Z, t_0) = (40, -30, -20, 0)\).</li>
+    </ul>
+    <p>زمان‌های رسیدن به صورت زیر مدل‌سازی می‌شوند:</p>
+    <ul>
+        <li>موج P: \( t_{p,i} = t_0 + \frac{d_i}{v_p} \)</li>
+        <li>موج S: \( t_{s,i} = t_0 + \frac{d_i}{v_s} \)</li>
+    </ul>
+    <p>که در آن \( d_i = \sqrt{(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2} \).</p>
+    <p>ما این مسئله را با استفاده از حداقل مربعات غیرخطی و یک حلقه while برای تکرار حل می‌کنیم، به جای استفاده از <code>scipy.optimize.least_squares</code>.</p>
+
+    <h2>گام 2: فرمول‌بندی حداقل مربعات</h2>
+    <h3>مشاهدات و مجهولات</h3>
+    <p><strong>مشاهدات</strong>: ما 15 ایستگاه داریم که هر کدام دارای زمان رسیدن موج P و S هستند، بنابراین \( 15 \times 2 = 30 \) مشاهده داریم. بردار مشاهدات \( \mathbf{l} \) را تعریف می‌کنیم:</p>
+    <p class="mathjax">\[
+    \mathbf{l} = [t_{p,1}, t_{p,2}, \dots, t_{p,15}, t_{s,1}, t_{s,2}, \dots, t_{s,15}]^T
+    \]</p>
+    <p>از داده‌ها:</p>
+    <p class="mathjax">\[
+    \mathbf{l} = [12.6359, 9.8547, \dots, 11.8174, 22.2787, 17.1955, \dots, 21.0473]^T \quad (30 \times 1 \text{ vector})
+    \]</p>
+
+    <p><strong>مجهولات</strong>: باید برای \((X, Y, Z, t_0)\) حل کنیم، بنابراین 4 مجهول داریم. بردار مجهولات \( \mathbf{x} \):</p>
+    <p class="mathjax">\[
+    \mathbf{x} = [X, Y, Z, t_0]^T
+    \]</p>
+    <p>حدس اولیه: \( \mathbf{x}_0 = [40, -30, -20, 0]^T \).</p>
+
+    <h3>مدل و باقی‌مانده‌ها</h3>
+    <p>زمان‌های رسیدن پیش‌بینی‌شده، توابع غیرخطی از مجهولات هستند:</p>
+    <p class="mathjax">\[
+    t_{p,i}^{predicted} = t_0 + \frac{\sqrt{(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2}}{v_p}
+    \]</p>
+    <p class="mathjax">\[
+    t_{s,i}^{predicted} = t_0 + \frac{\sqrt{(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2}}{v_s}
+    \]</p>
+    <p>باقی‌مانده‌ها به صورت زیر هستند:</p>
+    <p class="mathjax">\[
+    r_{p,i} = t_{p,i}^{observed} - t_{p,i}^{predicted}
+    \]</p>
+    <p class="mathjax">\[
+    r_{s,i} = t_{s,i}^{observed} - t_{s,i}^{predicted}
+    \]</p>
+    <p>بردار باقی‌مانده \( \mathbf{r} \) (30×1):</p>
+    <p class="mathjax">\[
+    \mathbf{r} = [r_{p,1}, r_{p,2}, \dots, r_{p,15}, r_{s,1}, r_{s,2}, \dots, r_{s,15}]^T
+    \]</p>
+
+    <h3>هدف حداقل مربعات</h3>
+    <p>ما مجموع مربعات باقی‌مانده‌ها را کمینه می‌کنیم:</p>
+    <p class="mathjax">\[
+    f(\mathbf{x}) = \mathbf{r}^T \mathbf{r} = \sum_{i=1}^{15} (r_{p,i}^2 + r_{s,i}^2)
+    \]</p>
+
+    <h3>خطی‌سازی و ماتریس طراحی</h3>
+    <p>از آنجا که مدل غیرخطی است، آن را حول تخمین فعلی \( \mathbf{x}_k = [X_k, Y_k, Z_k, t_{0,k}]^T \) خطی می‌کنیم. زمان رسیدن پیش‌بینی‌شده برای ایستگاه \( i \) به فاصله \( d_i \) بستگی دارد:</p>
+    <p class="mathjax">\[
+    d_i = \sqrt{(X - X_i)^2 + (Y - Y_i)^2 + (Z - Z_i)^2}
+    \]</p>
+    <p>برای موج P:</p>
+    <p class="mathjax">\[
+    t_{p,i} = t_0 + \frac{d_i}{v_p}
+    \]</p>
+    <p>ما مشتقات جزئی (ماتریس ژاکوبین) را برای تشکیل ماتریس طراحی \( \mathbf{A} \) محاسبه می‌کنیم. برای مشاهده \( i \)-ام موج P:</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{p,i}}{\partial X} = \frac{\partial}{\partial X} \left( t_0 + \frac{d_i}{v_p} \right) = \frac{1}{v_p} \frac{\partial d_i}{\partial X}
+    \]</p>
+    <p class="mathjax">\[
+    \frac{\partial d_i}{\partial X} = \frac{X - X_i}{d_i}
+    \]</p>
+    <p>بنابراین:</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{p,i}}{\partial X} = \frac{1}{v_p} \frac{X - X_i}{d_i}
+    \]</p>
+    <p>به طور مشابه:</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{p,i}}{\partial Y} = \frac{1}{v_p} \frac{Y - Y_i}{d_i}
+    \]</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{p,i}}{\partial Z} = \frac{1}{v_p} \frac{Z - Z_i}{d_i}
+    \]</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{p,i}}{\partial t_0} = 1
+    \]</p>
+    <p>برای موج S:</p>
+    <p class="mathjax">\[
+    \frac{\partial t_{s,i}}{\partial X} = \frac{1}{v_s} \frac{X - X_i}{d_i}
+    \]</p>
+    <p>و به همین ترتیب برای بقیه.</p>
+    <p>ماتریس طراحی \( \mathbf{A} \) (30×4) دارای ردیف‌های زیر است:</p>
+    <p class="mathjax">\[
+    \text{برای مشاهده } i\text{-ام موج P (ردیف } i\text{): } \left[ \frac{1}{v_p} \frac{X_k - X_i}{d_i}, \frac{1}{v_p} \frac{Y_k - Y_i}{d_i}, \frac{1}{v_p} \frac{Z_k - Z_i}{d_i}, 1 \right]
+    \]</p>
+    <p class="mathjax">\[
+    \text{برای مشاهده } i\text{-ام موج S (ردیف } (i+15)\text{): } \left[ \frac{1}{v_s} \frac{X_k - X_i}{d_i}, \frac{1}{v_s} \frac{Y_k - Y_i}{d_i}, \frac{1}{v_s} \frac{Z_k - Z_i}{d_i}, 1 \right]
+    \]</p>
+
+    <h3>درجات آزادی و رتبه</h3>
+    <p>تعداد مشاهدات: \( n = 30 \)</p>
+    <p>تعداد مجهولات: \( u = 4 \)</p>
+    <p><strong>درجات آزادی</strong>: \( \text{DOF} = n - u = 30 - 4 = 26 \)</p>
+    <p><strong>رتبه ماتریس طراحی</strong>: ماتریس \( \mathbf{A} \) دارای ابعاد 30×4 است. با فرض اینکه ایستگاه‌ها هم‌خط نیستند (که نیستند، زیرا در فضای سه‌بعدی پراکنده‌اند)، \( \mathbf{A} \) باید دارای رتبه کامل ستونی باشد، بنابراین:</p>
+    <p class="mathjax">\[
+    \text{Rank}(\mathbf{A}) = 4
+    \]</p>
+
+    <h3>معادلات نرمال</h3>
+    <p>خطی‌سازی باقی‌مانده‌ها: \( \mathbf{r} \approx \mathbf{l} - \mathbf{f}(\mathbf{x}_k) - \mathbf{A} \Delta \mathbf{x} \)، که در آن \( \Delta \mathbf{x} = \mathbf{x} - \mathbf{x}_k \). راه‌حل حداقل مربعات، \( \mathbf{r}^T \mathbf{r} \) را کمینه می‌کند، که منجر به معادلات نرمال می‌شود:</p>
+    <p class="mathjax">\[
+    \mathbf{A}^T \mathbf{A} \Delta \mathbf{x} = \mathbf{A}^T \Delta \mathbf{l}
+    \]</p>
+    <p>که در آن \( \Delta \mathbf{l} = \mathbf{l} - \mathbf{f}(\mathbf{x}_k) \) (مشاهدات منهای پیش‌بینی‌شده در تخمین فعلی). حل برای به‌روزرسانی:</p>
+    <p class="mathjax">\[
+    \Delta \mathbf{x} = (\mathbf{A}^T \mathbf{A})^{-1} \mathbf{A}^T \Delta \mathbf{l}
+    \]</p>
+    <p>به‌روزرسانی: \( \mathbf{x}_{k+1} = \mathbf{x}_k + \Delta \mathbf{x} \). با استفاده از حلقه while تکرار کنید تا \( \|\Delta \mathbf{x}\| \) کوچک شود.</p>
+     </div>
+  </body>
+</html>
